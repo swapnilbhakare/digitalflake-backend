@@ -3,16 +3,11 @@ import { ApiError } from "../utils/ApiError.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 import { uploadOnCloudinary } from "../utils/cloudinary.js";
 import { Product } from "../models/product.model.js";
-
+import mongoose from "mongoose";
 import { Category } from "../models/category.model.js";
 const addProduct = asyncHandler(async (req, res) => {
   // Taking fields from user
   const { name, packSize, mrp, status, category } = req.body;
-  console.log("Name:", name);
-  console.log("Pack Size:", packSize);
-  console.log("MRP:", mrp);
-  console.log("Status:", status);
-  console.log("Category ID:", category);
 
   // Checking fields are filled or not
   if (
@@ -26,7 +21,7 @@ const addProduct = asyncHandler(async (req, res) => {
 
   // cheking if a product image is provided or not
   let productLocalPath = req.file ? req.file.path : null;
-  console.log("local file path", productLocalPath);
+
   if (
     req.files &&
     Array.isArray(req.files.productImage) &&
@@ -34,16 +29,18 @@ const addProduct = asyncHandler(async (req, res) => {
   ) {
     productLocalPath = req.files.productImage[0].path;
   }
+
+  const cleanedCategory = category.replace(/"/g, "");
   // Fetching the category from the database based on categoryId
-  const findedCategory = await Category.findById(category);
-  console.log(findedCategory);
+
+  const findedCategory = await Category.findById(cleanedCategory);
+
   if (!findedCategory) {
     throw new ApiError(404, "Category not found");
   }
 
   // Uploading the product image to Cloudinary
   const productImage = await uploadOnCloudinary(productLocalPath);
-  console.log("product Image URL:", productImage?.url);
 
   // Storing product object - creating entry in the database
   const product = await Product.create({
@@ -68,13 +65,11 @@ const addProduct = asyncHandler(async (req, res) => {
 
 const updateProduct = asyncHandler(async (req, res) => {
   const { _id, ...updateFields } = req.body;
-  console.log("Received data for update:", req.body);
-  console.log("Update fields:", updateFields);
+
   const categoryObject =
     typeof updateFields.category === "object"
       ? updateFields.category
       : JSON.parse(updateFields.category);
-  console.log(categoryObject);
 
   try {
     // Checking if product exists
@@ -155,7 +150,7 @@ const fetchProducts = asyncHandler(async (req, res) => {
   if (!fetchedProducts) {
     throw new ApiError(404, "Products not found");
   }
-  console.log(fetchedProducts);
+
   return res
     .status(200)
     .json(new ApiResponse(200, fetchedProducts, "All products successfully"));
