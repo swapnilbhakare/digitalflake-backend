@@ -27,7 +27,7 @@ const addProduct = asyncHandler(async (req, res) => {
     Array.isArray(req.files.productImage) &&
     req.files.productImage.length > 0
   ) {
-    productLocalPath = req.files.productImage[0].path;
+    productLocalPath = req.files.productImage.path;
   }
 
   const cleanedCategory = category.replace(/"/g, "");
