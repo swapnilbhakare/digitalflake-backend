@@ -46,7 +46,7 @@ pipeline {
     }
     post {
         always {
-            node {
+            node('any') {
                 // Archive artifacts only if they exist
                 archiveArtifacts artifacts: 'build/**', allowEmptyArchive: true
                 junit 'test-results.xml'
