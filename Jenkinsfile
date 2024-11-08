@@ -1,6 +1,6 @@
-pipeline{
+pipeline {
     agent any
-    environment{
+    environment {
         NODE_ENV = 'production'
         PORT = '8080'
         CORS_ORIGIN = "*"
@@ -8,44 +8,43 @@ pipeline{
         ACCESS_TOKEN_EXPIRY = '1d'
         REFRESH_TOKEN_EXPIRY = '10d'
         REFRESH_TOKEN_SECRET = credentials('aCZ2zft4U94IVX9bVbqdm8t5zGlVAE7MEvwmgtiDR02SHcmq2sWgAySuDAPmJaf7')
-        CLOUDINARY_CLOUD_NAME =  credentials('dgz5gmmbm')
-        CLOUDINARY_API_KEY =  credentials('357922242585274')
+        CLOUDINARY_CLOUD_NAME = credentials('dgz5gmmbm')
+        CLOUDINARY_API_KEY = credentials('357922242585274')
         CLOUDINARY_API_SECRET = credentials('OhRGyYjOFt3KLRrz0ME79_MOAo0')
         MONGODB_URI = credentials('mongodb+srv://swapnilbhakare7:JMtVxjgr5Bt0CO8o@cluster0.hslhq5x.mongodb.net')
-
     }
-    stages{
-        stage('Clone Repository'){
-            steps{
+    stages {
+        stage('Clone Repository') {
+            steps {
                 git "https://github.com/swapnilbhakare/digitalflake-backend"
             }
         }
-        stage('Install Dependencies'){
-            steps{
-                script{
-                    def nodejsHome = tool name :'NodeJS',type: "NodeJS"
-                    env.PATH="${nodejsHome}/bin:${env.PATH}"
+        stage('Install Dependencies') {
+            steps {
+                script {
+                    def nodejsHome = tool name: 'NodeJS', type: "NodeJS"
+                    env.PATH = "${nodejsHome}/bin:${env.PATH}"
                 }
                 sh "npm install"
             }
         }
-        stage('Run Tests'){
-            steps{
+        stage('Run Tests') {
+            steps {
                 sh 'npm test'
             }
         }
-        stage('build'){
-            steps{
+        stage('Build') {
+            steps {
                 sh 'npm run build'
             }
         }
-        stage('Deploy'){
-            steps{
+        stage('Deploy') {
+            steps {
                 echo 'Deploying application...'
             }
         }
     }
-   post {
+    post {
         always {
             node {
                 // Archive artifacts only if they exist
@@ -54,3 +53,4 @@ pipeline{
             }
         }
     }
+}
