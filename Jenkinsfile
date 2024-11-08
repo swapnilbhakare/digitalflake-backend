@@ -45,10 +45,12 @@ pipeline{
             }
         }
     }
-    post {
-        always{
-             archiveArtifacts artifacts: 'build/**', allowEmptyArchive: true
-            junit 'test-results.xml'
+   post {
+        always {
+            node {
+                // Archive artifacts only if they exist
+                archiveArtifacts artifacts: 'build/**', allowEmptyArchive: true
+                junit 'test-results.xml'
+            }
         }
     }
-}
