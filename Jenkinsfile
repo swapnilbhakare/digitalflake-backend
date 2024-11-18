@@ -33,7 +33,7 @@ pipeline{
         }
         stage('Run Tests'){
             steps{
-                sh 'npm test'
+               sh 'npm test -- --reporter junit --reporter-options "output=test-results.xml"'
             }
         }
         stage('build'){
@@ -49,10 +49,10 @@ pipeline{
     }
     post {
         always {
-            node('any')  {
+           
                 archiveArtifacts artifacts: 'build/**', allowEmptyArchive: true
                 junit 'test-results.xml'
-            }
+            
         }
     }
 }
