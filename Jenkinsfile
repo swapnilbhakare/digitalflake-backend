@@ -38,35 +38,50 @@ stage('Clone Repository') {
             }
         }
 stage('Install Dependencies') {
-        steps {
-            script {
-                // Install curl if it's not available and then install Node.js
-                echo 'Installing curl and Node.js...'
-                sh '''
+    steps {
+        script {
+            // Check if curl is installed
+            sh '''
+                if ! command -v curl &> /dev/null
+                then
+                    echo "curl not found, installing..."
                     sudo apt-get update
                     sudo apt-get install -y curl
+                else
+                    echo "curl is already installed"
+                fi
+            '''
+
+            // Check if Node.js is installed
+            sh '''
+                if ! command -v node &> /dev/null
+                then
+                    echo "Node.js not found, installing..."
                     curl -sL https://deb.nodesource.com/setup_16.x | sudo -E bash -
                     sudo apt-get install -y nodejs
                     node -v
                     which node
-                '''
-                echo 'NodeJS installed successfully.'
+                else
+                    echo "Node.js is already installed"
+                fi
+            '''
 
-                // Fetch NodeJS tool and print the path
-                def nodejsHome = tool name: 'NodeJS', type: "NodeJS"
-                echo "NodeJS Home: ${nodejsHome}"
+            echo 'NodeJS installed successfully or already available.'
 
-                // Update the PATH environment variable to include NodeJS
-                env.PATH = "${nodejsHome}/bin:${env.PATH}"
-                echo "Updated PATH: ${env.PATH}"
+            // Fetch NodeJS tool and print the path
+            def nodejsHome = tool name: 'NodeJS', type: "NodeJS"
+            echo "NodeJS Home: ${nodejsHome}"
 
-                echo 'Installing npm dependencies...'
-            }
-            // Install npm dependencies
-            sh 'npm install || { echo "npm install failed"; exit 1; }'
+            // Update the PATH environment variable to include NodeJS
+            env.PATH = "${nodejsHome}/bin:${env.PATH}"
+            echo "Updated PATH: ${env.PATH}"
+
+            echo 'Installing npm dependencies...'
         }
+        // Install npm dependencies
+        sh 'npm install || { echo "npm install failed"; exit 1; }'
     }
-
+}
         stage('Run Tests') {
             steps {
                 script {
