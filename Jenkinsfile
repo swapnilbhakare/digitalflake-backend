@@ -1,5 +1,5 @@
 pipeline{
-    agent any
+    agent {label 'linux'}
     environment{
         NODE_ENV = 'production'
         PORT = '8080'
