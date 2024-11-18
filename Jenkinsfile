@@ -32,7 +32,7 @@ pipeline{
         }
         stage('Run Tests') {
     steps {
-        sh 'npm test -- --reporter junit --reporter-options "output=test-results.xml"'
+        sh 'npm test '
         sh 'ls -al'  // List files to verify test results
     }
 }
@@ -53,7 +53,7 @@ pipeline{
             node('built-in'){
            
                 archiveArtifacts artifacts: 'build/**', allowEmptyArchive: true
-                junit 'test-results.xml'
+            
             }
         }
     }
