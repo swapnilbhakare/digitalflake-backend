@@ -26,7 +26,8 @@ pipeline{
                     def nodejsHome = tool name :'NodeJS',type: "NodeJS"
                     env.PATH="${nodejsHome}/bin:${env.PATH}"
                 }
-                sh "npm install"
+               sh 'npm install || { echo "npm install failed"; exit 1; }'
+
             }
         }
         stage('Run Tests') {
