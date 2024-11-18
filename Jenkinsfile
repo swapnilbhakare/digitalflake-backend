@@ -17,7 +17,8 @@ pipeline{
 stages {
         stage('Clone Repository') {
             steps {
-                git "https://github.com/swapnilbhakare/digitalflake-backend"
+                       git branch: 'main', url: 'https://github.com/swapnilbhakare/digitalflake-backend'
+
             }
         }
         stage('Install Dependencies') {
