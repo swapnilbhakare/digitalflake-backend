@@ -1,7 +1,5 @@
 pipeline{
-    agent {
-    docker { image 'node:16-alpine' }
-  }
+   agent any 
     environment{
         NODE_ENV = 'production'
         PORT = '8080'
