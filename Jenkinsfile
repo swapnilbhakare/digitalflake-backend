@@ -18,6 +18,16 @@ pipeline{
 }
 
 stages {
+
+   stage('Verify NodeJS') {
+    steps {
+        script {
+            sh 'node -v'
+            sh 'npm -v'
+        }
+    }
+}
+
         stage('Clone Repository') {
             steps {
                script {
