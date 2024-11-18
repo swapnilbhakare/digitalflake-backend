@@ -52,7 +52,7 @@ stage('Install Dependencies') {
             echo 'Installing npm dependencies...'
         }
         // Install npm dependencies
-        sh 'npm install || { echo "npm install failed"; exit 1; }'
+        sh 'npm install  -f  || { echo "npm install failed"; exit 1; }'
     }
 }
         stage('Run Tests') {
