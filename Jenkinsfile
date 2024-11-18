@@ -24,20 +24,29 @@ stages {
 
             }
         }
-        stage('Install Dependencies') {
-            steps {
-                script {
-    def nodejsHome = tool name: 'NodeJS', type: "NodeJS"
-    echo "NodeJS Home: ${nodejsHome}"
-    env.PATH = "${nodejsHome}/bin:${env.PATH}"
-    echo "Updated PATH: ${env.PATH}"
-    sh 'node -v'
-                    echo 'Installing npm dependencies...'
+      stage('Install Dependencies') {
+    steps {
+        script {
+            // Fetch NodeJS tool and print the path
+            def nodejsHome = tool name: 'NodeJS', type: "NodeJS"
+            echo "NodeJS Home: ${nodejsHome}"
+            
+            // Update the PATH environment variable to include NodeJS
+            env.PATH = "${nodejsHome}/bin:${env.PATH}"
+            echo "Updated PATH: ${env.PATH}"
+            
+            // Check NodeJS version and installation
+            sh 'node -v'
+            sh 'which node'  // Verify node binary location
+
+            echo 'Installing npm dependencies...'
+        }
+
+        // Install npm dependencies
+        sh 'npm install || { echo "npm install failed"; exit 1; }'
+    }
 }
 
-                sh 'npm install || { echo "npm install failed"; exit 1; }'
-            }
-        }
         stage('Run Tests') {
             steps {
                 script {
