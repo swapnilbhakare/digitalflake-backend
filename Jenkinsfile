@@ -14,37 +14,48 @@ pipeline{
         MONGODB_URI = credentials('mongodb+srv://swapnilbhakare7:JMtVxjgr5Bt0CO8o@cluster0.hslhq5x.mongodb.net')
 
     }
-    stages{
-        stage('Clone Repository'){
-            steps{
+stages {
+        stage('Clone Repository') {
+            steps {
                 git "https://github.com/swapnilbhakare/digitalflake-backend"
             }
         }
-        stage('Install Dependencies'){
-            steps{
-                script{
-                    def nodejsHome = tool name :'NodeJS',type: "NodeJS"
-                    env.PATH="${nodejsHome}/bin:${env.PATH}"
+        stage('Install Dependencies') {
+            steps {
+                script {
+                    def nodejsHome = tool name: 'NodeJS', type: "NodeJS"
+                    env.PATH = "${nodejsHome}/bin:${env.PATH}"
                 }
-               sh 'npm install || { echo "npm install failed"; exit 1; }'
-
+                sh 'npm install || { echo "npm install failed"; exit 1; }'
             }
         }
         stage('Run Tests') {
-    steps {
-        sh 'npm test '
-        sh 'ls -al'  // List files to verify test results
-    }
-}
-
-        stage('build'){
-            steps{
+            steps {
+                sh 'npm test'
+                sh 'ls -al' // List files to verify test results
+            }
+        }
+        stage('Build Application') {
+            steps {
                 sh 'npm run build'
             }
         }
-        stage('Deploy'){
-            steps{
-                echo 'Deploying application...'
+        stage('Build Docker Image') {
+            steps {
+                script {
+                    sh 'docker build -t digitalflake-backend .'
+                }
+            }
+        }
+        stage('Deploy Docker Container') {
+            steps {
+                script {
+                    // Stop and remove the existing container if running
+                    sh 'docker ps -q -f "name=digitalflake-backend" | xargs -r docker stop | xargs -r docker rm'
+
+                    // Run the new container
+                    sh 'docker run -d -p 8080:8080 --name digitalflake-backend digitalflake-backend'
+                }
             }
         }
     }
