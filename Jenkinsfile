@@ -47,7 +47,7 @@ pipeline{
     }
     post {
         always {
-            node {
+            nodenode('any')  {
                 archiveArtifacts artifacts: 'build/**', allowEmptyArchive: true
                 junit 'test-results.xml'
             }
