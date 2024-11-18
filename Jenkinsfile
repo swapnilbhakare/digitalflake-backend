@@ -1,5 +1,5 @@
 pipeline{
-   agent Built-In Node 
+   agent any
     environment{
         NODE_ENV = 'production'
         PORT = '8080'
