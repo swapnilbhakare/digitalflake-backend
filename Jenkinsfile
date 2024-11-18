@@ -1,19 +1,19 @@
 pipeline{
    agent { label 'built-in' }
-    environment{
-        NODE_ENV = 'production'
-        PORT = '8080'
-        CORS_ORIGIN = "*"
-        ACCESS_TOKEN_SECRET = credentials('zgoCGYHy1IQBfapifAVuwlIyU5rLb0psHO5RFDeOlLfPoHPyLjHuSZAPk4EDue1l')
-        ACCESS_TOKEN_EXPIRY = '1d'
-        REFRESH_TOKEN_EXPIRY = '10d'
-        REFRESH_TOKEN_SECRET = credentials('aCZ2zft4U94IVX9bVbqdm8t5zGlVAE7MEvwmgtiDR02SHcmq2sWgAySuDAPmJaf7')
-        CLOUDINARY_CLOUD_NAME =  credentials('dgz5gmmbm')
-        CLOUDINARY_API_KEY =  credentials('357922242585274')
-        CLOUDINARY_API_SECRET = credentials('OhRGyYjOFt3KLRrz0ME79_MOAo0')
-        MONGODB_URI = credentials('mongodb+srv://swapnilbhakare7:JMtVxjgr5Bt0CO8o@cluster0.hslhq5x.mongodb.net')
+   environment {
+    NODE_ENV = 'production'
+    PORT = '8080'
+    CORS_ORIGIN = "*"
+    ACCESS_TOKEN_SECRET = credentials('access_token_secret')
+    ACCESS_TOKEN_EXPIRY = '1d'
+    REFRESH_TOKEN_EXPIRY = '10d'
+    REFRESH_TOKEN_SECRET = credentials('refresh_token_secret')
+    CLOUDINARY_CLOUD_NAME = credentials('cloudinary_cloud_name')
+    CLOUDINARY_API_KEY = credentials('cloudinary_api_key')
+    CLOUDINARY_API_SECRET = credentials('cloudinary_api_secret')
+    MONGODB_URI = credentials('mongodb_uri')
+}
 
-    }
 stages {
         stage('Clone Repository') {
             steps {
