@@ -32,6 +32,7 @@ stages {
     env.PATH = "${nodejsHome}/bin:${env.PATH}"
     echo "Updated PATH: ${env.PATH}"
     sh 'node -v'
+                    echo 'Installing npm dependencies...'
 }
 
                 sh 'npm install || { echo "npm install failed"; exit 1; }'
