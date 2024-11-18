@@ -28,7 +28,7 @@ stages {
     }
 }
 
-        stage('Clone Repository') {
+stage('Clone Repository') {
             steps {
                script {
                     echo 'Cloning repository...'
@@ -37,28 +37,35 @@ stages {
 
             }
         }
-      stage('Install Dependencies') {
-    steps {
-        script {
-            // Fetch NodeJS tool and print the path
-            def nodejsHome = tool name: 'NodeJS', type: "NodeJS"
-            echo "NodeJS Home: ${nodejsHome}"
-            
-            // Update the PATH environment variable to include NodeJS
-            env.PATH = "${nodejsHome}/bin:${env.PATH}"
-            echo "Updated PATH: ${env.PATH}"
-            
-            // Check NodeJS version and installation
-            sh 'node -v'
-            sh 'which node'  // Verify node binary location
+stage('Install Dependencies') {
+        steps {
+            script {
+                // Install curl if it's not available and then install Node.js
+                echo 'Installing curl and Node.js...'
+                sh '''
+                    sudo apt-get update
+                    sudo apt-get install -y curl
+                    curl -sL https://deb.nodesource.com/setup_16.x | sudo -E bash -
+                    sudo apt-get install -y nodejs
+                    node -v
+                    which node
+                '''
+                echo 'NodeJS installed successfully.'
 
-            echo 'Installing npm dependencies...'
+                // Fetch NodeJS tool and print the path
+                def nodejsHome = tool name: 'NodeJS', type: "NodeJS"
+                echo "NodeJS Home: ${nodejsHome}"
+
+                // Update the PATH environment variable to include NodeJS
+                env.PATH = "${nodejsHome}/bin:${env.PATH}"
+                echo "Updated PATH: ${env.PATH}"
+
+                echo 'Installing npm dependencies...'
+            }
+            // Install npm dependencies
+            sh 'npm install || { echo "npm install failed"; exit 1; }'
         }
-
-        // Install npm dependencies
-        sh 'npm install || { echo "npm install failed"; exit 1; }'
     }
-}
 
         stage('Run Tests') {
             steps {
