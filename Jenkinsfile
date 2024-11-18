@@ -40,34 +40,7 @@ stage('Clone Repository') {
 stage('Install Dependencies') {
     steps {
         script {
-            // Check if curl is installed
-            sh '''
-                if ! command -v curl &> /dev/null
-                then
-                    echo "curl not found, installing..."
-                    sudo apt-get update
-                    sudo apt-get install -y curl
-                else
-                    echo "curl is already installed"
-                fi
-            '''
-
-            // Check if Node.js is installed
-            sh '''
-                if ! command -v node &> /dev/null
-                then
-                    echo "Node.js not found, installing..."
-                    curl -sL https://deb.nodesource.com/setup_16.x | sudo -E bash -
-                    sudo apt-get install -y nodejs
-                    node -v
-                    which node
-                else
-                    echo "Node.js is already installed"
-                fi
-            '''
-
-            echo 'NodeJS installed successfully or already available.'
-
+         
             // Fetch NodeJS tool and print the path
             def nodejsHome = tool name: 'NodeJS', type: "NodeJS"
             echo "NodeJS Home: ${nodejsHome}"
