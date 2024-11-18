@@ -46,9 +46,11 @@ pipeline{
         }
     }
     post {
-        always{
-             archiveArtifacts artifacts: 'build/**', allowEmptyArchive: true
-            junit 'test-results.xml'
+        always {
+            node {
+                archiveArtifacts artifacts: 'build/**', allowEmptyArchive: true
+                junit 'test-results.xml'
+            }
         }
     }
 }
