@@ -31,11 +31,13 @@ pipeline{
                 sh "npm install"
             }
         }
-        stage('Run Tests'){
-            steps{
-               sh 'npm test -- --reporter junit --reporter-options "output=test-results.xml"'
-            }
-        }
+        stage('Run Tests') {
+    steps {
+        sh 'npm test -- --reporter junit --reporter-options "output=test-results.xml"'
+        sh 'ls -al'  // List files to verify test results
+    }
+}
+
         stage('build'){
             steps{
                 sh 'npm run build'
