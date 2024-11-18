@@ -26,6 +26,7 @@ stages {
                 script {
                     def nodejsHome = tool name: 'NodeJS', type: "NodeJS"
                     env.PATH = "${nodejsHome}/bin:${env.PATH}"
+                   sh 'node -v'  
                 }
                 sh 'npm install || { echo "npm install failed"; exit 1; }'
             }
