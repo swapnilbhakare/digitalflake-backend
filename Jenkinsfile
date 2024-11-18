@@ -27,14 +27,13 @@ stages {
         stage('Install Dependencies') {
             steps {
                 script {
-                      echo 'Setting up NodeJS environment...'
+    def nodejsHome = tool name: 'NodeJS', type: "NodeJS"
+    echo "NodeJS Home: ${nodejsHome}"
+    env.PATH = "${nodejsHome}/bin:${env.PATH}"
+    echo "Updated PATH: ${env.PATH}"
+    sh 'node -v'
+}
 
-                    def nodejsHome = tool name: 'NodeJS', type: "NodeJS"
-                    env.PATH = "${nodejsHome}/bin:${env.PATH}"
-         
-                   sh 'node -v'  
-                  echo 'Installing npm dependencies...'
-                }
                 sh 'npm install || { echo "npm install failed"; exit 1; }'
             }
         }
