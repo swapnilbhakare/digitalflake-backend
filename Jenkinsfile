@@ -1,8 +1,6 @@
 pipeline{
    agent { label 'built-in' }
-   tools {
-        nodejs 'NodeJS' // Ensure 'NodeJS' matches the Jenkins NodeJS tool name
-    }
+   
    environment {
     NODE_ENV = 'production'
     PORT = '8080'
